@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.h2database:h2:1.4.200'
     testImplementation 'com.h2database:h2'
 
+    // Embeded Redis for local
+    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
 }
 
 tasks.named('test') {
