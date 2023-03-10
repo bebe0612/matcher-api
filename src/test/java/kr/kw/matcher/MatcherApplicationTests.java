@@ -1,4 +1,4 @@
-package com.kw.matcher;
+package kr.kw.matcher;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
