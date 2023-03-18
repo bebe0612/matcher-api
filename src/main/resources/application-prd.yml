@@ -5,15 +5,15 @@ spring:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    url: jdbc:h2:mem:matcher-database;MODE=MySQL;
     username: sa
     password:
     driver-class-name: org.h2.Driver
   jpa:
     database: h2
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
   redis:
-    host: 127.0.0.1
+    host: matcher-redis
     port: 6379

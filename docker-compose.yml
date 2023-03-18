@@ -1,0 +1,24 @@
+version: "3.8"
+services:
+  matcher-redis:
+    container_name: matcher-redis
+    image: redis:6
+    ports:
+      - "6379:6379"
+  matcher-database:
+    container_name: matcher-database
+    image: oscarfonts/h2:latest
+    environment:
+      - H2_DATABASE=matcher
+    ports:
+      - "1521:1521"
+  matcher-app:
+    container_name: matcher-app
+    build: .
+    depends_on:
+      - matcher-database
+      - matcher-redis
+    image: matcher-app
+    ports:
+      - "80:80"
+    restart: always
