@@ -20,3 +20,10 @@ spring:
 spring:
   profiles:
     active: prd
+
+
+---
+
+spring:
+  profiles:
+    active: test
