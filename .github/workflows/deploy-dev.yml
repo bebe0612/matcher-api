@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Configure Docker daemon
+        run: |
+          mkdir -p ~/.docker
+          echo '{ "insecure-registries": ["${{ secrets.API_HOST }}:5000"] }' | sudo tee /etc/docker/daemon.json
+          sudo service docker restart
+      - name: Docker build
+        run: |
+          docker build --platform linux/amd64 -f Dockerfile -t ${{ secrets.API_HOST }}:5000/api:latest .
+          docker push ${{ secrets.API_HOST }}:5000/api:latest
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.API_HOST }}
+          username: ${{ secrets.REMOTE_SSH_USERNAME }}
+          password: ${{ secrets.REMOTE_SSH_PASSWORD }}
+          script: |
+            docker pull localhost:5000/api:latest
+            docker stop api
+            docker rm api
+            docker run -d --name api -p 80:80 localhost:5000/api:latest
