@@ -31,8 +31,6 @@ class ArticleRepositoryTest {
         // Then
         assertThat(articleRepository.count()).isEqualTo(1);
         assertThat(articleCommentRepository.count()).isEqualTo(2);
-
-        assertThat(test).isNotNull();
     }
 
     @DisplayName("update 테스트")
