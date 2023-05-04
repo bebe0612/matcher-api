@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Setter
@@ -32,6 +33,19 @@ public class User {
 
     @Column(nullable = false)
     private Boolean deleted;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public static User of(Long id) {
         return User.builder()
