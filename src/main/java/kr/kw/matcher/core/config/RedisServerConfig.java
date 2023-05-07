@@ -11,7 +11,6 @@ import javax.annotation.PreDestroy;
 import java.io.IOException;
 
 @Slf4j
-@Profile("local")
 @Configuration
 public class RedisServerConfig {
     @Value("${spring.redis.port}")
