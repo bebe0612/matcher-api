@@ -19,6 +19,9 @@ public class ChatRoomMember {
     private Long id;
 
     @Column(nullable = false)
+    private Long roomId;
+
+    @Column(nullable = false)
     private Long userId;
 
     @Column(nullable = false)
@@ -28,8 +31,9 @@ public class ChatRoomMember {
     @Column(nullable = false)
     private Boolean deleted;
 
-    public static ChatRoomMember of(Long userId) {
+    public static ChatRoomMember of(Long roomId, Long userId) {
         return ChatRoomMember.builder()
+                .roomId(roomId)
                 .userId(userId)
                 .createdDt(LocalDateTime.now())
                 .deleted(false)
