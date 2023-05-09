@@ -18,6 +18,9 @@ public class ChatRoom {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+    private Long hostId;
+
     @Column()
     private String name;
 
@@ -31,8 +34,9 @@ public class ChatRoom {
     @Column(nullable = false)
     private Boolean deleted;
 
-    public static ChatRoom of(String name) {
+    public static ChatRoom of(Long hostId, String name) {
         return ChatRoom.builder()
+                .hostId(hostId)
                 .name(name)
                 .memberCount(0L)
                 .createdDt(LocalDateTime.now())
