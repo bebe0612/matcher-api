@@ -15,5 +15,6 @@ public class UserController {
 
     @GetMapping("/me")
     public void getMyProfile() {
+        userService.createOne();
     }
 }
