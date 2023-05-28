@@ -28,6 +28,15 @@ public class ChatRoomMemberService {
 
         return chatRoomMemberRepository.save(chatroomMember);
     }
+    @Transactional
+    public void deleteOne(Long roomId, Long userId){
+        chatRoomMemberRepository.findByRoomIdAndUserId(roomId, userId)
+                .ifPresentOrElse(
+                        (value)->{ chatRoomMemberRepository.deleteByRoomIdAndUserId(roomId, userId); },
+                        ()->{throw new RuntimeException("사용자 " + userId.toString() + "는 채팅방 " + roomId.toString()  + "에 존재하지 않습니다."); }
+                );
+    }
+
 
     public List<ChatRoomMemberDto> getChatRoomMembers(Long roomId) {
         return chatRoomMemberRepoSupport.findRoomMembersByRoomId(roomId);
