@@ -36,7 +36,7 @@ public class ChatRoomService {
     private HashOperations<String, Long, ChatRoom> opsHashChatRoom; //chatRoom => "CHAT_ROOMS", {roomId}, chatRoom
 
     private Map<Long, ChannelTopic> topics;
-
+    public static int aa = 0;
     @PostConstruct
     public void init(){
         opsHashChatRoom = redisTemplate.opsForHash();
@@ -66,7 +66,21 @@ public class ChatRoomService {
         chatRoom.setMemberCount(chatRoom.getMemberCount() + 1L);
         chatRoomMemberService.createOne(roomId, userId);
     }
-
+    @Transactional
+    public void leaveRoom(Long roomId, Long userId){
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
+        chatRoom.setMemberCount(chatRoom.getMemberCount() - 1L);
+        chatRoomMemberService.deleteOne(roomId, userId);
+        if(chatRoom.getMemberCount() < 1){
+            deleteRoom(chatRoom);
+        }
+    }
+    @Transactional
+    public void deleteRoom(ChatRoom chatRoom){
+        opsHashChatRoom.delete(CHAT_ROOM, chatRoom.getId());
+        topics.remove(chatRoom.getId());
+        chatRoomRepository.delete(chatRoom);
+    }
     @Transactional
     public List<ChatRoomDto> findAllRoom(){
         return opsHashChatRoom.values(CHAT_ROOM).stream().map(i -> ChatRoomDto.from(i)).collect(Collectors.toList());

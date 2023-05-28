@@ -20,12 +20,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatController {
     private final RedisPublisher redisPublisher;
     private final ChatRoomService chatRoomService;
+    private final ChatService chatService;
     @MessageMapping("/chat/message")  //"/pub/chat/message"
     public void message(ChatDto message, ChatRoomMemberDto chatRoomMember){
         if (MessageType.ENTER.equals(message.getType())) {
             chatRoomService.joinRoom(message.getRoomId(), message.getUserId());
             message.setText(message.getUserId() + "님이 입장하셨습니다.");
+        }else if(MessageType.QUIT.equals(message.getType())){
+            message.setText(message.getUserId()  + "님이 퇴장하셨습니다.");
+            chatRoomService.leaveRoom(message.getRoomId(), message.getUserId());
         }
+        chatService.createOne(message.getRoomId(),message.getUserId(), message.getText());
         redisPublisher.publish(chatRoomService.getTopic(message.getRoomId()), message);
     }
 }

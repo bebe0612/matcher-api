@@ -46,4 +46,14 @@ public class ChatRoom implements Serializable {
                 .deleted(false)
                 .build();
     }
+    public static ChatRoom of(Long id, Long hostId, String name) {
+        return ChatRoom.builder()
+                .id(id)
+                .hostId(hostId)
+                .name(name)
+                .memberCount(0L)
+                .createdDt(LocalDateTime.now())
+                .deleted(false)
+                .build();
+    }
 }
