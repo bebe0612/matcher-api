@@ -1,4 +1,4 @@
-package kr.kw.matcher.module.user.dto;
+package kr.kw.matcher.module.user.application.dto;
 
 import kr.kw.matcher.module.user.domain.User;
 import lombok.*;

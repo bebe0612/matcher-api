@@ -7,7 +7,7 @@ import kr.kw.matcher.module.article.repository.ArticleCommentRepository;
 import kr.kw.matcher.module.article.repository.ArticleRepository;
 import kr.kw.matcher.module.user.domain.User;
 import kr.kw.matcher.module.user.domain.UserRepository;
-import kr.kw.matcher.module.user.dto.UserDto;
+import kr.kw.matcher.module.user.application.dto.UserDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
