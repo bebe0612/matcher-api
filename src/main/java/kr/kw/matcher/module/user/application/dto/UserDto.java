@@ -28,6 +28,6 @@ public class UserDto {
     }
 
     public User toEntity() {
-        return User.of(id);
+        return User.of(id, null, null, null);
     }
 }

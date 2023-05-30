@@ -141,7 +141,7 @@ class ArticleCommentServiceTest {
     }
 
     private User createUser() {
-        return User.of(1L);
+        return User.of(1L, "name", "password", "nickname");
     }
 
     private UserDto createUserDto() {
