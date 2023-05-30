@@ -16,7 +16,7 @@ class UserTest {
 
     @Test
     void ofTest() {
-        User user = User.of(1L);
+        User user = User.of(1L, "email", "password", "name");
 
         assertEquals(1L, user.getId());
         assertEquals(false, user.getDeleted());
@@ -25,7 +25,7 @@ class UserTest {
 
     @Test
     void saveTest() {
-        User user = User.of(1L);
+        User user = User.of(1L, "email", "password", "name");
 
         User saved = userRepository.save(user);
         Optional<User> found = userRepository.findById(1L);
