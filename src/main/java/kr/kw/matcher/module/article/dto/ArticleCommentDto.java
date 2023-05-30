@@ -3,7 +3,7 @@ package kr.kw.matcher.module.article.dto;
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.article.domain.ArticleComment;
 import kr.kw.matcher.module.user.domain.User;
-import kr.kw.matcher.module.user.dto.UserDto;
+import kr.kw.matcher.module.user.application.dto.UserDto;
 import lombok.*;
 
 import java.time.LocalDateTime;

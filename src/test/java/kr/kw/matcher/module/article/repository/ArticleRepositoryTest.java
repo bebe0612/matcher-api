@@ -21,7 +21,7 @@ class ArticleRepositoryTest {
     @Test
     void test_select_and_insert() {
         // When
-        User savedUser = userRepository.save(User.of(1L));
+        User savedUser = userRepository.save(User.of(1L, "email", "password", "name"));
         Article savedArticle = articleRepository.save(Article.of("new", "new article", savedUser));
         ArticleComment savedArticleComment1 = articleCommentRepository.save(ArticleComment.of(savedArticle, savedUser, "new comment1"));
         ArticleComment savedArticleComment2 = articleCommentRepository.save(ArticleComment.of(savedArticle, savedUser, "new comment2"));
@@ -37,7 +37,7 @@ class ArticleRepositoryTest {
     @Test
     void test_update() {
         // Given
-        User savedUser = userRepository.save(User.of(1L));
+        User savedUser = userRepository.save(User.of(1L, "email", "password", "name"));
         Article savedArticle = articleRepository.save(Article.of("new", "new article", savedUser));
 
         // When
@@ -51,7 +51,7 @@ class ArticleRepositoryTest {
     @Test
     void test_delete() {
         // When
-        User savedUser = userRepository.save(User.of(1L));
+        User savedUser = userRepository.save(User.of(1L, "email", "password", "name"));
         Article savedArticle = articleRepository.save(Article.of("new", "new article", savedUser));
 
         // When

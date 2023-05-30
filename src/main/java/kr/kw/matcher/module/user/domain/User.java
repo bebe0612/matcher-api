@@ -21,7 +21,13 @@ public class User {
     @Id
     private Long id;
 
-    @Column()
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String nickname;
 
     @Column()
@@ -47,9 +53,12 @@ public class User {
         return Objects.hash(id);
     }
 
-    public static User of(Long id) {
+    public static User of(Long id, String email, String password, String nickname) {
         return User.builder()
                 .id(id)
+                .email(email)
+                .password(password)
+                .nickname(nickname)
                 .createdDt(LocalDateTime.now())
                 .deleted(false)
                 .build();
