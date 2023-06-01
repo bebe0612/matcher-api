@@ -184,7 +184,14 @@ class ArticleServiceTest {
     }
 
     private User createUser() {
-        return User.of(1L, "email", "password", "nickname");
+        return User.of(
+                1L,
+                "email",
+                "password",
+                "nickname",
+                "kwangwoon",
+                2019L
+        );
     }
 
     private Article createArticle() {

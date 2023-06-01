@@ -38,7 +38,10 @@ public class AuthService {
         User newUser = User.of(newMember.getId(),
                 body.getEmail(),
                 passwordEncoder.encode(body.getPassword()),
-                body.getName());
+                body.getName(),
+                body.getSchoolName(),
+                body.getYearOfAdmission()
+        );
 
         userRepository.save(newUser);
 

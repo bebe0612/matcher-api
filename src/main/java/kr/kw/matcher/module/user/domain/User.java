@@ -30,6 +30,12 @@ public class User {
     @Column(nullable = false)
     private String nickname;
 
+    @Column(nullable = false)
+    private String schoolName;
+
+    @Column(nullable = false)
+    private Long yearOfAdmission;
+
     @Column()
     private String description;
 
@@ -53,12 +59,14 @@ public class User {
         return Objects.hash(id);
     }
 
-    public static User of(Long id, String email, String password, String nickname) {
+    public static User of(Long id, String email, String password, String nickname, String schoolName, Long yearOfAdmission) {
         return User.builder()
                 .id(id)
                 .email(email)
                 .password(password)
                 .nickname(nickname)
+                .schoolName(schoolName)
+                .yearOfAdmission(yearOfAdmission)
                 .createdDt(LocalDateTime.now())
                 .deleted(false)
                 .build();
