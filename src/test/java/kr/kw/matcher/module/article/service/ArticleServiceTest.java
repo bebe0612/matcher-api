@@ -40,32 +40,65 @@ class ArticleServiceTest {
     @Test
     void givenNoSearchParameters_whenSearchingArticles_thenReturnsArticlePage() {
         // Given
+        User user = createUser();
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findAll(pageable)).willReturn(Page.empty());
+        given(userRepository.getReferenceById(user.getId())).willReturn(user); // searchArticles 메소드에서 userRepository.getReferenceById 을 호출하기 때문에 포함해야 함
+        given(articleRepository.findByUser_SchoolNameAndUser_YearOfAdmission(
+                user.getSchoolName(),
+                user.getYearOfAdmission(),
+                pageable
+        )).willReturn(Page.empty());
 
         // When
-        Page<ArticleDto> articles = sut.searchArticles(null, null, pageable);
+        Page<ArticleDto> articles = sut.searchArticles(user.getId(), null, null, pageable);
 
         // Then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findAll(pageable);
+        then(userRepository).should().getReferenceById(user.getId());
+        then(articleRepository)
+                .should()
+                .findByUser_SchoolNameAndUser_YearOfAdmission(
+                        user.getSchoolName(),
+                        user.getYearOfAdmission(),
+                        pageable
+                );
     }
 
     @DisplayName("검색어와 함께 게시글을 검색하면, 게시판 페이지를 반환한다.")
     @Test
     void givenSearchParameters_whenSearchingArticles_thenReturnsArticlePage() {
         // Given
+        User user = createUser();
         SearchType searchType = SearchType.TITLE;
         String searchKeyword = "title";
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
+        given(userRepository.getReferenceById(user.getId())).willReturn(user);
+        given(articleRepository.findByTitleContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+                searchKeyword,
+                user.getSchoolName(),
+                user.getYearOfAdmission(),
+                pageable
+        )).willReturn(Page.empty());
 
         // When
-        Page<ArticleDto> articles = sut.searchArticles(searchType, searchKeyword, pageable);
+        Page<ArticleDto> articles = sut.searchArticles(
+                user.getId(),
+                searchType,
+                searchKeyword,
+                pageable
+        );
 
         // Then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
+        then(userRepository).should().getReferenceById(user.getId());
+        then(articleRepository)
+                .should()
+                .findByTitleContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+                        searchKeyword,
+                        user.getSchoolName(),
+                        user.getYearOfAdmission(),
+                        pageable
+                );
     }
 
     @DisplayName("게시글 ID로 조회하면, 댓글 달긴 게시글을 반환한다.")
