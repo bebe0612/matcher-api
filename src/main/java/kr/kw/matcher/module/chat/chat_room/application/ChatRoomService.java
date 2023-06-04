@@ -66,8 +66,6 @@ public class ChatRoomService {
         chatRoom.setMemberCount(chatRoom.getMemberCount() + 1L);
         chatRoomMemberService.createOne(roomId, userId);
     }
-
-    //채팅방 퇴장, 인원이 없으면 채팅방 삭제
     @Transactional
     public void leaveRoom(Long roomId, Long userId){
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
@@ -77,25 +75,15 @@ public class ChatRoomService {
             deleteRoom(chatRoom);
         }
     }
-
-    //채팅방 삭제
     @Transactional
     public void deleteRoom(ChatRoom chatRoom){
         opsHashChatRoom.delete(CHAT_ROOM, chatRoom.getId());
         topics.remove(chatRoom.getId());
         chatRoomRepository.delete(chatRoom);
     }
-
-
     @Transactional
     public List<ChatRoomDto> findAllRoom(){
         return opsHashChatRoom.values(CHAT_ROOM).stream().map(i -> ChatRoomDto.from(i)).collect(Collectors.toList());
-    }
-
-    //해당 유저가 포함된 채팅룸 조회
-    @Transactional
-    public List<ChatRoomDto> findAllRoomByUserId(Long userId){
-        return chatRoomRepository.findAllRoomByUserId(userId).stream().map(i->ChatRoomDto.from(i)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -106,6 +94,7 @@ public class ChatRoomService {
         return dto;
     }
 
+    @Transactional
     public ChannelTopic getTopic(Long roomId) {
         return topics.get(roomId);
     }
