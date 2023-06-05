@@ -67,6 +67,9 @@ dependencies {
 
     // Embeded Redis for local
     implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.1'
+
+    //Swagger => http://localhost/swagger-ui/
+    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
 }
 
 tasks.named('test') {

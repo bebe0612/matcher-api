@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
-                    .antMatchers("/api-docs/**","/swagger-ui/**").permitAll()
+                    .antMatchers("/api-docs/**", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**", "/swagger/**", "/v3/api-docs/**").permitAll()
                     .antMatchers("/","/v1/auth/**","/h2-console/**", "/docs").permitAll()
                     .antMatchers("/v1/env/**").permitAll()
                     .antMatchers("/v1/unsigned/**").permitAll()
