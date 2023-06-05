@@ -26,19 +26,40 @@ public class ArticleService {
 
     // SearchType 에 따른 게시글 조회
     @Transactional(readOnly = true)
-    public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
-        if (searchKeyword == null || searchKeyword.isBlank()) { // 키워드 없이 검색된다면 전체 게시글 조회
-            return articleRepository.findAll(pageable).map(ArticleDto::from);
+    public Page<ArticleDto> searchArticles(Long userId, SearchType searchType, String searchKeyword, Pageable pageable) {
+        User user = userRepository.getReferenceById(userId);
+
+        if (searchKeyword == null || searchKeyword.isBlank()) { // 키워드 없이 검색한다면 사용자 학교 전체 + 동일 졸업년도 게시글 조회
+            return articleRepository.findByUser_SchoolNameAndUser_YearOfAdmission(
+                    user.getSchoolName(),
+                    user.getYearOfAdmission(),
+                    pageable
+            ).map(ArticleDto::from);
         }
 
         if (searchType == SearchType.TITLE) {
-            return articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
+            return articleRepository.findByTitleContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+                    searchKeyword,
+                    user.getSchoolName(),
+                    user.getYearOfAdmission(),
+                    pageable
+            ).map(ArticleDto::from);
         }
         else if (searchType == SearchType.CONTENT) {
-            return articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
+            return articleRepository.findByContentContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+                    searchKeyword,
+                    user.getSchoolName(),
+                    user.getYearOfAdmission(),
+                    pageable
+            ).map(ArticleDto::from);
         }
-        else { // TODO: 작성자 아이디 or 작성자 닉네임으로 검색 고려하기
-            return articleRepository.findByUser_IdContaining(searchKeyword, pageable).map(ArticleDto::from);
+        else {
+            return articleRepository.findByUser_NicknameContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+                    searchKeyword,
+                    user.getSchoolName(),
+                    user.getYearOfAdmission(),
+                    pageable
+            ).map(ArticleDto::from);
         }
     }
 

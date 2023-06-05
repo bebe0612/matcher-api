@@ -12,7 +12,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UserDto {
     Long id;
+    String email;
     String nickname;
+    String schoolName;
+    Long yearOfAdmission;
     LocalDateTime createdDt;
 
     public static UserDto of(Long id) {
@@ -28,6 +31,13 @@ public class UserDto {
     }
 
     public User toEntity() {
-        return User.of(id, null, null, null);
+        return User.of(
+                id,
+                email,
+                null,
+                nickname,
+                schoolName,
+                yearOfAdmission
+        );
     }
 }

@@ -15,9 +15,29 @@ public interface ArticleRepository extends
         QuerydslPredicateExecutor<Article>, // 모든 필드에 대한 검색 기능 추가
         QuerydslBinderCustomizer<QArticle> // 추가적인 검색 기능을 위해 추가
 {
-    Page<Article> findByTitleContaining(String title, Pageable pageable);
-    Page<Article> findByContentContaining(String content, Pageable pageable);
-    Page<Article> findByUser_IdContaining(String userId, Pageable pageable);
+    Page<Article> findByUser_SchoolNameAndUser_YearOfAdmission(
+            String schoolName,
+            Long yearOfAdmission,
+            Pageable pageable
+    );
+    Page<Article> findByTitleContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+            String title,
+            String schoolName,
+            Long yearOfAdmission,
+            Pageable pageable
+    );
+    Page<Article> findByContentContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+            String content,
+            String schoolName,
+            Long yearOfAdmission,
+            Pageable pageable
+    );
+    Page<Article> findByUser_NicknameContainingAndUser_SchoolNameAndUser_YearOfAdmission(
+            String userNickname,
+            String schoolName,
+            Long yearOfAdmission,
+            Pageable pageable
+    );
 
     void deleteByIdAndUser_Id(Long articleId, Long userId);
 
