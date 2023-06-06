@@ -16,25 +16,25 @@ import java.time.LocalDateTime;
 public class ArticleCommentDto {
     Long id;
     Long articleId;
-    UserDto userDto;
+    Long userId;
     String content;
     LocalDateTime createdDt;
 
-    public static ArticleCommentDto of(Long articleId, UserDto userDto, String content) {
+    public static ArticleCommentDto of(Long articleId, Long userId, String content) {
         return ArticleCommentDto.builder()
                 .id(null)
                 .articleId(articleId)
-                .userDto(userDto)
+                .userId(userId)
                 .content(content)
                 .createdDt(null)
                 .build();
     }
 
-    public static ArticleCommentDto of(Long id, Long articleId, UserDto userDto, String content, LocalDateTime createdDt) {
+    public static ArticleCommentDto of(Long id, Long articleId, Long userId, String content, LocalDateTime createdDt) {
         return ArticleCommentDto.builder()
                 .id(id)
                 .articleId(articleId)
-                .userDto(userDto)
+                .userId(userId)
                 .content(content)
                 .createdDt(createdDt)
                 .build();
@@ -44,7 +44,7 @@ public class ArticleCommentDto {
         return ArticleCommentDto.builder()
                 .id(entity.getId())
                 .articleId(entity.getArticle().getId())
-                .userDto(UserDto.from(entity.getUser()))
+                .userId(entity.getUser().getId())
                 .content(entity.getContent())
                 .createdDt(entity.getCreatedDt())
                 .build();

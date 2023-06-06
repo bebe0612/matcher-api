@@ -141,14 +141,14 @@ class ArticleServiceTest {
     void givenArticleInfo_whenSavingArticle_thenSavesArticle() {
         // Given
         ArticleDto dto = createArticleDto();
-        given(userRepository.getReferenceById(dto.getUserDto().getId())).willReturn(createUser());
+        given(userRepository.getReferenceById(dto.getId())).willReturn(createUser());
         given(articleRepository.save(any(Article.class))).willReturn(createArticle());
 
         // When
         sut.saveArticle(dto);
 
         // Then
-        then(userRepository).should().getReferenceById(dto.getUserDto().getId());
+        then(userRepository).should().getReferenceById(dto.getId());
         then(articleRepository).should().save(any(Article.class));
     }
 
@@ -159,7 +159,7 @@ class ArticleServiceTest {
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", createUserDto());
         given(articleRepository.getReferenceById(article.getId())).willReturn(article);
-        given(userRepository.getReferenceById(dto.getUserDto().getId())).willReturn(dto.getUserDto().toEntity());
+        given(userRepository.getReferenceById(dto.getId())).willReturn(createUser());
 
         // When
         sut.updateArticle(article.getId(), dto);
@@ -169,7 +169,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("title", dto.getTitle())
                 .hasFieldOrPropertyWithValue("content", dto.getContent());
         then(articleRepository).should().getReferenceById(dto.getId());
-        then(userRepository).should().getReferenceById(dto.getUserDto().getId());
+        then(userRepository).should().getReferenceById(dto.getId());
     }
 
     @DisplayName("없는 게시글의 수정 정보를 입력하면, 경고 로그를 찍고 아무 것도 하지 않는다.")
@@ -247,6 +247,6 @@ class ArticleServiceTest {
     }
 
     private ArticleDto createArticleDto(String title, String content, UserDto userDto) {
-        return ArticleDto.of(1L, title, content, userDto, LocalDateTime.now());
+        return ArticleDto.of(1L, title, content, userDto.getId(), userDto.getNickname(), LocalDateTime.now());
     }
 }

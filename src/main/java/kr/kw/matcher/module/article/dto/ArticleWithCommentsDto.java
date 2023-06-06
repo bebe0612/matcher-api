@@ -1,7 +1,6 @@
 package kr.kw.matcher.module.article.dto;
 
 import kr.kw.matcher.module.article.domain.Article;
-import kr.kw.matcher.module.user.application.dto.UserDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,15 +17,16 @@ public class ArticleWithCommentsDto {
     Long id;
     String title;
     String content;
-    UserDto userDto;
+    String nickname;
     Set<ArticleCommentDto> articleCommentDtos;
     LocalDateTime createdDt;
+    Long articleCount;
 
     public static ArticleWithCommentsDto of(
             Long id,
             String title,
             String content,
-            UserDto userDto,
+            String nickname,
             Set<ArticleCommentDto> articleCommentDtos,
             LocalDateTime createdDt
     ) {
@@ -34,7 +34,7 @@ public class ArticleWithCommentsDto {
                 .id(id)
                 .title(title)
                 .content(content)
-                .userDto(userDto)
+                .nickname(nickname)
                 .articleCommentDtos(articleCommentDtos)
                 .createdDt(createdDt)
                 .build();
@@ -45,7 +45,7 @@ public class ArticleWithCommentsDto {
                 entity.getId(),
                 entity.getTitle(),
                 entity.getContent(),
-                UserDto.from(entity.getUser()),
+                entity.getUser().getNickname(),
                 entity.getArticleComments().stream()
                         .map(ArticleCommentDto::from)
                         .collect(Collectors.toCollection(LinkedHashSet::new)),
