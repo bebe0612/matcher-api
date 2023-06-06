@@ -65,7 +65,7 @@ public class ArticleController {
     }
 
     // 게시글 업데이트
-    @PostMapping("/{articleId}/write")
+    @PatchMapping("/{articleId}/write")
     public void updateArticle(
             @PathVariable Long articleId,
             ArticleRequest articleRequest,
@@ -76,7 +76,7 @@ public class ArticleController {
     }
 
     // 게시글 삭제
-    @PostMapping ("/{articleId}/delete")
+    @DeleteMapping("/{articleId}")
     public void deleteArticle(
             @PathVariable Long articleId,
             @AuthenticationPrincipal Member member
