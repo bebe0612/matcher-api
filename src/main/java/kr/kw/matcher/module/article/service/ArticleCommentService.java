@@ -1,6 +1,8 @@
 package kr.kw.matcher.module.article.service;
 
 import kr.kw.matcher.core.exception.ConflictException;
+import kr.kw.matcher.core.exception.ForbiddenException;
+import kr.kw.matcher.core.exception.NotFoundException;
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.article.domain.ArticleComment;
 import kr.kw.matcher.module.article.dto.ArticleCommentDto;
@@ -45,18 +47,13 @@ public class ArticleCommentService {
 
     // 댓글 업데이트
     public void updateArticleComment(Long articleCommentId, ArticleCommentDto dto) {
-        try {
-            ArticleComment articleComment = articleCommentRepository.getReferenceById(articleCommentId);
-            User user = userRepository.getReferenceById(dto.getUserId());
+        ArticleComment articleComment = articleCommentRepository.findById(articleCommentId).orElseThrow(NotFoundException::new);
 
-            if (articleComment.getUser().equals(user)) {
-                if (dto.getContent() != null) {
-                    articleComment.setContent(dto.getContent());
-                }
-            }
-        } catch (EntityNotFoundException e) {
-            log.warn("댓글 업데이트를 실패했습니다. 댓글을 찾을 수 없습니다. - dto : {}", dto);
+        if (!articleComment.getUser().getId().equals(dto.getUserId())) {
+            throw new ForbiddenException("댓글 작성자만 수정할 수 있습니다.");
         }
+
+        articleComment.setContent(dto.getContent());
     }
 
     // 댓글 삭제
