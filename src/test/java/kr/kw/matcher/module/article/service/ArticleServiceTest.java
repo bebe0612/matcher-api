@@ -1,5 +1,6 @@
 package kr.kw.matcher.module.article.service;
 
+import kr.kw.matcher.core.exception.NotFoundException;
 import kr.kw.matcher.module.article.constant.SearchType;
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.article.dto.ArticleDto;
@@ -9,6 +10,7 @@ import kr.kw.matcher.module.user.domain.User;
 import kr.kw.matcher.module.user.domain.UserRepository;
 import kr.kw.matcher.module.user.application.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -119,7 +121,7 @@ class ArticleServiceTest {
         then(articleRepository).should().findById(articleId);
     }
 
-    @DisplayName("게시글이 없으면, 예외를 던진다.")
+    @DisplayName("없는 게시글을 조회하려고 하면, 예외를 던진다.")
     @Test
     void givenNonexistentArticleId_whenSearchingArticle_thenThrowsException() {
         // Given
@@ -127,12 +129,11 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.empty());
 
         // When
-        Throwable t = catchThrowable(() -> sut.getArticleWithComments(articleId));
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            sut.getArticleWithComments(articleId);
+        });
 
         // Then
-        assertThat(t)
-                .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage("게시글 조회를 실패했습니다. 게시글을 찾을 수 없습니다. - articleId : " + articleId);
         then(articleRepository).should().findById(articleId);
     }
 
@@ -141,15 +142,15 @@ class ArticleServiceTest {
     void givenArticleInfo_whenSavingArticle_thenSavesArticle() {
         // Given
         ArticleDto dto = createArticleDto();
-        given(userRepository.getReferenceById(dto.getId())).willReturn(createUser());
         given(articleRepository.save(any(Article.class))).willReturn(createArticle());
+        given(userRepository.findById(dto.getId())).willReturn(Optional.of(createUser()));
 
         // When
         sut.saveArticle(dto);
 
         // Then
-        then(userRepository).should().getReferenceById(dto.getId());
         then(articleRepository).should().save(any(Article.class));
+        then(userRepository).should().findById(dto.getId());
     }
 
     @DisplayName("게시글의 수정 정보를 입력하면, 게시글을 수정한다.")
@@ -158,8 +159,7 @@ class ArticleServiceTest {
         // Given
         Article article = createArticle();
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", createUserDto());
-        given(articleRepository.getReferenceById(article.getId())).willReturn(article);
-        given(userRepository.getReferenceById(dto.getId())).willReturn(createUser());
+        given(articleRepository.findById(article.getId())).willReturn(Optional.of(article));
 
         // When
         sut.updateArticle(article.getId(), dto);
@@ -168,22 +168,23 @@ class ArticleServiceTest {
         assertThat(article)
                 .hasFieldOrPropertyWithValue("title", dto.getTitle())
                 .hasFieldOrPropertyWithValue("content", dto.getContent());
-        then(articleRepository).should().getReferenceById(dto.getId());
-        then(userRepository).should().getReferenceById(dto.getId());
+        then(articleRepository).should().findById(dto.getId());
     }
 
-    @DisplayName("없는 게시글의 수정 정보를 입력하면, 경고 로그를 찍고 아무 것도 하지 않는다.")
+    @DisplayName("없는 게시글을 수정하려고 하면, 예외를 던진다.")
     @Test
     void givenNonexistentArticleInfo_whenUpdatingArticle_thenLogsWarningAndDoesNothing() {
         // Given
         ArticleDto dto = createArticleDto("새 타이틀", "새 내용", UserDto.of(1L));
-        given(articleRepository.getReferenceById(dto.getId())).willThrow(EntityNotFoundException.class);
+        given(articleRepository.findById(dto.getId())).willReturn(Optional.empty());
 
         // When
-        sut.updateArticle(dto.getId(), dto);
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            sut.updateArticle(dto.getId(), dto);
+        });
 
         // Then
-        then(articleRepository).should().getReferenceById(dto.getId());
+        then(articleRepository).should().findById(dto.getId());
     }
 
     @DisplayName("게시글의 ID 와 유저 ID 를 입력하면, 게시글을 삭제한다")
