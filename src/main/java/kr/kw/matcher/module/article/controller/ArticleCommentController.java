@@ -5,10 +5,7 @@ import kr.kw.matcher.module.article.service.ArticleCommentService;
 import kr.kw.matcher.module.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/v1/comments")
@@ -17,7 +14,7 @@ public class ArticleCommentController {
     private final ArticleCommentService articleCommentService;
 
     // 댓글 추가
-    @PostMapping("/new")
+    @PostMapping
     public void postNewArticleComment(
             ArticleCommentRequest articleCommentRequest,
             @AuthenticationPrincipal Member member
@@ -26,7 +23,7 @@ public class ArticleCommentController {
     }
 
     // 댓글 업데이트
-    @PostMapping("/{commentId}/update")
+    @PatchMapping("/{commentId}")
     public void updateArticleComment(
             @PathVariable Long commentId,
             ArticleCommentRequest articleCommentRequest,
@@ -36,7 +33,7 @@ public class ArticleCommentController {
     }
 
     // 댓글 삭제
-    @PostMapping("/{commentId}/delete")
+    @DeleteMapping("/{commentId}")
     public void deleteArticleComment(
             @PathVariable Long commentId,
             @AuthenticationPrincipal Member member
