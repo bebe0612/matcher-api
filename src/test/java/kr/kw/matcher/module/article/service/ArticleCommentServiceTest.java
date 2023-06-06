@@ -61,7 +61,7 @@ class ArticleCommentServiceTest {
         // Given
         ArticleCommentDto dto = createArticleCommentDto("댓글");
         given(articleRepository.getReferenceById(dto.getArticleId())).willReturn(createArticle());
-        given(userRepository.getReferenceById(dto.getUserDto().getId())).willReturn(createUser());
+        given(userRepository.getReferenceById(dto.getUserId())).willReturn(createUser());
         given(articleCommentRepository.save(any(ArticleComment.class))).willReturn(null);
 
         // When
@@ -69,7 +69,7 @@ class ArticleCommentServiceTest {
 
         // Then
         then(articleRepository).should().getReferenceById(dto.getArticleId());
-        then(userRepository).should().getReferenceById(dto.getUserDto().getId());
+        then(userRepository).should().getReferenceById(dto.getUserId());
         then(articleCommentRepository).should().save(any(ArticleComment.class));
     }
 
@@ -98,7 +98,7 @@ class ArticleCommentServiceTest {
         ArticleComment articleComment = createArticleComment(oldContent);
         ArticleCommentDto dto = createArticleCommentDto(updatedContent);
         given(articleCommentRepository.getReferenceById(dto.getId())).willReturn(articleComment);
-        given(userRepository.getReferenceById(dto.getUserDto().getId())).willReturn(dto.getUserDto().toEntity());
+        given(userRepository.getReferenceById(dto.getUserId())).willReturn(createUser());
 
         // When
         sut.updateArticleComment(articleComment.getId(), dto);
@@ -108,7 +108,7 @@ class ArticleCommentServiceTest {
                 .isNotEqualTo(oldContent)
                 .isEqualTo(updatedContent);
         then(articleCommentRepository).should().getReferenceById(dto.getId());
-        then(userRepository).should().getReferenceById(dto.getUserDto().getId());
+        then(userRepository).should().getReferenceById(dto.getUserId());
     }
 
     @DisplayName("없는 댓글 정보를 수정하려고 하면, 경고 로그를 찍고 아무 것도 안 한다.")
@@ -181,8 +181,9 @@ class ArticleCommentServiceTest {
         return ArticleCommentDto.of(
                 1L,
                 1L,
-                createUserDto(),
-                content, LocalDateTime.now()
+                1L,
+                content,
+                LocalDateTime.now()
         );
     }
 }

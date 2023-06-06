@@ -38,7 +38,7 @@ public class ArticleCommentService {
     public void saveArticleComment(ArticleCommentDto dto) {
         try {
             Article article = articleRepository.getReferenceById(dto.getArticleId());
-            User user = userRepository.getReferenceById(dto.getUserDto().getId());
+            User user = userRepository.getReferenceById(dto.getUserId());
 
             articleCommentRepository.save(dto.toEntity(article, user));
         } catch (EntityNotFoundException e) {
@@ -50,7 +50,7 @@ public class ArticleCommentService {
     public void updateArticleComment(Long articleCommentId, ArticleCommentDto dto) {
         try {
             ArticleComment articleComment = articleCommentRepository.getReferenceById(articleCommentId);
-            User user = userRepository.getReferenceById(dto.getUserDto().getId());
+            User user = userRepository.getReferenceById(dto.getUserId());
 
             if (articleComment.getUser().equals(user)) {
                 if (dto.getContent() != null) {
