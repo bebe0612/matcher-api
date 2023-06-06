@@ -2,7 +2,6 @@ package kr.kw.matcher.module.article.dto;
 
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.user.domain.User;
-import kr.kw.matcher.module.user.application.dto.UserDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,25 +15,28 @@ public class ArticleDto {
     Long id;
     String title;
     String content;
-    UserDto userDto;
+    Long userId;
+    String nickname;
     LocalDateTime createdDt;
 
-    public static ArticleDto of(String title, String content, UserDto userDto) {
+    public static ArticleDto of(String title, String content, Long userId, String nickname) {
         return ArticleDto.builder()
                 .id(null)
                 .title(title)
                 .content(content)
-                .userDto(userDto)
+                .userId(userId)
+                .nickname(nickname)
                 .createdDt(null)
                 .build();
     }
 
-    public static ArticleDto of(Long id, String title, String content, UserDto userDto, LocalDateTime createdDt) {
+    public static ArticleDto of(Long id, String title, String content, Long userId, String nickname, LocalDateTime createdDt) {
         return ArticleDto.builder()
                 .id(id)
                 .title(title)
                 .content(content)
-                .userDto(userDto)
+                .userId(userId)
+                .nickname(nickname)
                 .createdDt(createdDt)
                 .build();
     }
@@ -44,7 +46,8 @@ public class ArticleDto {
         return ArticleDto.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
-                .userDto(dto.getUserDto())
+                .userId(dto.getUserId())
+                .nickname(dto.getNickname())
                 .build();
     }
 
@@ -57,7 +60,8 @@ public class ArticleDto {
                 entity.getId(),
                 entity.getTitle(),
                 entity.getContent(),
-                UserDto.from(entity.getUser()),
+                entity.getUser().getId(),
+                entity.getUser().getNickname(),
                 entity.getCreatedDt()
         );
     }

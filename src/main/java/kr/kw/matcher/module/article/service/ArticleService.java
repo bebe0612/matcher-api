@@ -73,7 +73,7 @@ public class ArticleService {
 
     // 게시글 저장
     public void saveArticle(ArticleDto dto) {
-        User user = userRepository.getReferenceById(dto.getUserDto().getId());
+        User user = userRepository.getReferenceById(dto.getId());
 
         ArticleDto save = ArticleDto.of(dto);
         articleRepository.save(save.toEntity(user));
@@ -83,7 +83,7 @@ public class ArticleService {
     public void updateArticle(Long articleId, ArticleDto dto) {
         try {
             Article article = articleRepository.getReferenceById(articleId);
-            User user = userRepository.getReferenceById(dto.getUserDto().getId());
+            User user = userRepository.getReferenceById(dto.getId());
 
             if (article.getUser().equals(user)) { // 게시글 작성자 == 현재 로그인한 사용자
                 if (dto.getTitle() != null) {
@@ -106,5 +106,9 @@ public class ArticleService {
 
     public long getArticleCount() {
         return articleRepository.count();
+    }
+
+    public String getUserNickname(Long userId) {
+        return userRepository.getReferenceById(userId).getNickname();
     }
 }
