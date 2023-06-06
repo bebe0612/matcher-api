@@ -18,7 +18,7 @@ public class ArticleCommentController {
     // 댓글 추가
     @PostMapping
     public void postNewArticleComment(
-            @Valid ArticleCommentRequest articleCommentRequest,
+            @Valid @RequestBody ArticleCommentRequest articleCommentRequest,
             @AuthenticationPrincipal Member member
     ) {
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(member.getId()));
@@ -28,7 +28,7 @@ public class ArticleCommentController {
     @PatchMapping("/{commentId}")
     public void updateArticleComment(
             @PathVariable Long commentId,
-            @Valid ArticleCommentRequest articleCommentRequest,
+            @Valid @RequestBody ArticleCommentRequest articleCommentRequest,
             @AuthenticationPrincipal Member member
     ) {
         articleCommentService.updateArticleComment(commentId, articleCommentRequest.toDto(member.getId()));
