@@ -1,5 +1,6 @@
 package kr.kw.matcher.module.article.service;
 
+import kr.kw.matcher.core.exception.ConflictException;
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.article.domain.ArticleComment;
 import kr.kw.matcher.module.article.dto.ArticleCommentDto;
@@ -36,14 +37,10 @@ public class ArticleCommentService {
 
     // 댓글 저장
     public void saveArticleComment(ArticleCommentDto dto) {
-        try {
-            Article article = articleRepository.getReferenceById(dto.getArticleId());
-            User user = userRepository.getReferenceById(dto.getUserId());
+        Article article = articleRepository.findById(dto.getArticleId()).orElseThrow(ConflictException::new);
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(ConflictException::new);
 
-            articleCommentRepository.save(dto.toEntity(article, user));
-        } catch (EntityNotFoundException e) {
-            log.warn("댓글 저장을 실패했습니다. 댓글 작성에 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage());
-        }
+        articleCommentRepository.save(dto.toEntity(article, user));
     }
 
     // 댓글 업데이트
