@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RequestMapping("/v1/comments")
 @RestController
@@ -16,7 +18,7 @@ public class ArticleCommentController {
     // 댓글 추가
     @PostMapping
     public void postNewArticleComment(
-            ArticleCommentRequest articleCommentRequest,
+            @Valid ArticleCommentRequest articleCommentRequest,
             @AuthenticationPrincipal Member member
     ) {
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(member.getId()));
@@ -26,7 +28,7 @@ public class ArticleCommentController {
     @PatchMapping("/{commentId}")
     public void updateArticleComment(
             @PathVariable Long commentId,
-            ArticleCommentRequest articleCommentRequest,
+            @Valid ArticleCommentRequest articleCommentRequest,
             @AuthenticationPrincipal Member member
     ) {
         articleCommentService.updateArticleComment(commentId, articleCommentRequest.toDto(member.getId()));
