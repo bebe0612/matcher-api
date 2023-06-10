@@ -49,6 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.addHeader("Access-Control-Allow-Headers", "custId, appId, Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN, Access-Control-Allow-Origin");
         response.addHeader("Access-Control-Expose-Headers", "Authorization, authenticated");
         response.addHeader("Access-Control-Max-Age", "1728000");
+
         filterChain.doFilter(request, response);
     }
 
