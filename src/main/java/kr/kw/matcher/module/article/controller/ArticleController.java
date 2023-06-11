@@ -17,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -55,9 +56,9 @@ public class ArticleController {
     }
 
     // 게시글 입력
-    @PostMapping("/write")
+    @PostMapping
     public void postNewArticle(
-            ArticleRequest articleRequest,
+            @Valid @RequestBody ArticleRequest articleRequest,
             @AuthenticationPrincipal Member member
     ) {
         String nickname = articleService.getUserNickname(member.getId());
@@ -65,10 +66,10 @@ public class ArticleController {
     }
 
     // 게시글 업데이트
-    @PostMapping("/{articleId}/write")
+    @PatchMapping("/{articleId}")
     public void updateArticle(
             @PathVariable Long articleId,
-            ArticleRequest articleRequest,
+            @Valid @RequestBody ArticleRequest articleRequest,
             @AuthenticationPrincipal Member member
     ) {
         String nickname = articleService.getUserNickname(member.getId());
@@ -76,7 +77,7 @@ public class ArticleController {
     }
 
     // 게시글 삭제
-    @PostMapping ("/{articleId}/delete")
+    @DeleteMapping("/{articleId}")
     public void deleteArticle(
             @PathVariable Long articleId,
             @AuthenticationPrincipal Member member

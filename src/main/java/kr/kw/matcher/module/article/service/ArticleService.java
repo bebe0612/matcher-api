@@ -1,5 +1,8 @@
 package kr.kw.matcher.module.article.service;
 
+import kr.kw.matcher.core.exception.ConflictException;
+import kr.kw.matcher.core.exception.ForbiddenException;
+import kr.kw.matcher.core.exception.NotFoundException;
 import kr.kw.matcher.module.article.constant.SearchType;
 import kr.kw.matcher.module.article.domain.Article;
 import kr.kw.matcher.module.article.dto.ArticleDto;
@@ -13,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityNotFoundException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,34 +69,27 @@ public class ArticleService {
     public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
         return articleRepository.findById(articleId)
                 .map(ArticleWithCommentsDto::from)
-                .orElseThrow(() -> new EntityNotFoundException("게시글 조회를 실패했습니다. 게시글을 찾을 수 없습니다. - articleId : " + articleId));
+                .orElseThrow(NotFoundException::new);
     }
 
     // 게시글 저장
     public void saveArticle(ArticleDto dto) {
-        User user = userRepository.getReferenceById(dto.getId());
-
         ArticleDto save = ArticleDto.of(dto);
+        User user = userRepository.findById(dto.getUserId()).orElseThrow(ConflictException::new);
+
         articleRepository.save(save.toEntity(user));
     }
 
     // 게시글 업데이트
     public void updateArticle(Long articleId, ArticleDto dto) {
-        try {
-            Article article = articleRepository.getReferenceById(articleId);
-            User user = userRepository.getReferenceById(dto.getId());
+        Article article = articleRepository.findById(articleId).orElseThrow(NotFoundException::new);
 
-            if (article.getUser().equals(user)) { // 게시글 작성자 == 현재 로그인한 사용자
-                if (dto.getTitle() != null) {
-                    article.setTitle(dto.getTitle());
-                }
-                if (dto.getContent() != null) {
-                    article.setContent(dto.getContent());
-                }
-            }
-        } catch (EntityNotFoundException e) {
-            log.warn("게시글 업데이트를 실패했습니다. 게시글을 찾을 수 없습니다. - dto : {}", dto);
+        if (!article.getUser().getId().equals(dto.getUserId())) {
+            throw new ForbiddenException("게시글 작성자만 수정할 수 있습니다.");
         }
+
+        article.setTitle(dto.getTitle());
+        article.setContent(dto.getContent());
     }
 
     // 게시글 삭제
