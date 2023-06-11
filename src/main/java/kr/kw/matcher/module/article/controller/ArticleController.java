@@ -56,7 +56,7 @@ public class ArticleController {
     }
 
     // 게시글 입력
-    @PostMapping("/write")
+    @PostMapping
     public void postNewArticle(
             @Valid @RequestBody ArticleRequest articleRequest,
             @AuthenticationPrincipal Member member
@@ -66,7 +66,7 @@ public class ArticleController {
     }
 
     // 게시글 업데이트
-    @PatchMapping("/{articleId}/write")
+    @PatchMapping("/{articleId}")
     public void updateArticle(
             @PathVariable Long articleId,
             @Valid @RequestBody ArticleRequest articleRequest,
