@@ -8,6 +8,7 @@ import kr.kw.matcher.module.member.domain.MemberRepository;
 import kr.kw.matcher.module.user.application.dto.AuthDto;
 import kr.kw.matcher.module.user.domain.User;
 import kr.kw.matcher.module.user.domain.UserRepository;
+import kr.kw.matcher.module.user.presentation.request.SignInBody;
 import kr.kw.matcher.module.user.presentation.request.SignUpBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,24 @@ public class AuthService {
         return AuthDto.builder()
                 .token(jwtToken)
                 .userId(newMember.getId())
+                .build();
+    }
+
+    @Transactional
+    public AuthDto signIn(SignInBody body) {
+        User user = userRepository.findByEmail(body.getEmail()).orElseThrow(() -> new ConflictException("존재하지 않는 이메일입니다."));
+
+        if (!passwordEncoder.matches(body.getPassword(), user.getPassword())) {
+            throw new ConflictException("비밀번호가 일치하지 않습니다.");
+        }
+
+        Member member = memberRepository.findById(user.getId()).orElseThrow(() -> new ConflictException("존재하지 않는 회원입니다."));
+
+        String jwtToken = jwtTokenProvider.createToken(member.getId().toString(), member.getRoles());
+
+        return AuthDto.builder()
+                .token(jwtToken)
+                .userId(member.getId())
                 .build();
     }
 }
