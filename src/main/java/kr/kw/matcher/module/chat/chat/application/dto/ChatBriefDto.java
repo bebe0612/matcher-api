@@ -5,6 +5,7 @@ import com.campusnow.api.module.chat.chat.domain.QChat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.QBean;
+import kr.kw.matcher.module.chat.chat.domain.ChatType;
 import lombok.Data;
 
 import java.time.LocalDateTime;
