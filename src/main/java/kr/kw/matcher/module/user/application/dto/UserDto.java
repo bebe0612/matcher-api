@@ -27,6 +27,10 @@ public class UserDto {
     public static UserDto from(User entity) {
         return UserDto.builder()
                 .id(entity.getId())
+                .email(entity.getEmail())
+                .nickname(entity.getNickname())
+                .schoolName(entity.getSchoolName())
+                .yearOfAdmission(entity.getYearOfAdmission())
                 .build();
     }
 
