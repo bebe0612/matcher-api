@@ -33,7 +33,7 @@ public class ArticleController {
     public ArticlesResponse articles(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchKeyword,
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 10, sort = "createdDt", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal Member member
     ) {
         Page<ArticleDto> articles = articleService.searchArticles(member.getId(), searchType, searchKeyword, pageable);
