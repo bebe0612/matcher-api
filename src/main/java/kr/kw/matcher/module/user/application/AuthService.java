@@ -2,7 +2,6 @@ package kr.kw.matcher.module.user.application;
 
 import kr.kw.matcher.core.config.JwtTokenProvider;
 import kr.kw.matcher.core.exception.ConflictException;
-import kr.kw.matcher.module.member.application.CustomUserDetailsService;
 import kr.kw.matcher.module.member.domain.Member;
 import kr.kw.matcher.module.member.domain.MemberRepository;
 import kr.kw.matcher.module.user.application.dto.AuthDto;
