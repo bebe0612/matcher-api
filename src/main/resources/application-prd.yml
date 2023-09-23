@@ -1,19 +1,19 @@
 spring:
   application:
     name: matcher-api
+  h2:
+    console:
+      enabled: true
   datasource:
-    url: jdbc:mysql://database-1.cdqbol9rmvzu.ap-northeast-2.rds.amazonaws.com:3306/matcher?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=Asia/Seoul
-    username:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    username: sa
     password:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    hikari:
-      maximum-pool-size: 30
+    driver-class-name: org.h2.Driver
   jpa:
-    database: mysql
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL8SpatialDialect
+    database: h2
     hibernate:
       ddl-auto: update
-    show-sql: false
+    show-sql: true
   redis:
     host: 127.0.0.1
     port: 6379
@@ -21,4 +21,4 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 matcher:
-  jwtSecretKey:
+  jwtSecretKey: matcher
