@@ -17,14 +17,9 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Configure Docker daemon
-        run: |
-          mkdir -p ~/.docker
-          echo '{ "insecure-registries": ["${{ secrets.API_HOST }}:5000"] }' | sudo tee /etc/docker/daemon.json
-          sudo service docker restart
       - name: Docker build
         run: |
-          docker build --platform linux/amd64 -f Dockerfile -t ${{ secrets.API_HOST }}:5000/api:latest .
+          docker build --platform linux/amd64 -f Dockerfile -t ${{ secrets.DOCKER_IMAGE_NAME }} .
           docker push ${{ secrets.API_HOST }}:5000/api:latest
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -33,7 +28,7 @@ jobs:
           username: ${{ secrets.REMOTE_SSH_USERNAME }}
           password: ${{ secrets.REMOTE_SSH_PASSWORD }}
           script: |
-            docker pull localhost:5000/api:latest
+            docker pull ${{ secrets.DOCKER_IMAGE_NAME }}
             docker stop api
             docker rm api
-            docker run -d --name api -p 80:80 localhost:5000/api:latest
+            docker run -d --name api -p 80:80 ${{ secrets.DOCKER_IMAGE_NAME }}
