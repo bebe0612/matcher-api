@@ -1,7 +1,8 @@
-package kr.kw.matcher.module.chat.chat.controller;
+package kr.kw.matcher.module.chat.chat.presentation;
 
 import kr.kw.matcher.module.chat.chat.application.ChatService;
 import kr.kw.matcher.module.chat.chat.domain.Chat;
+import kr.kw.matcher.module.chat.chat.presentation.request.ChatCreateBody;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -14,7 +15,7 @@ public class ChatController {
     private final ChatService chatService;
 
     @MessageMapping("/chat/message")
-    public void message(Chat chat){
-        chatService.sendMessage(chat);
+    public void message(ChatCreateBody body) {
+        chatService.sendMessage(body);
     }
 }

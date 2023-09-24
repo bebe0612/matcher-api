@@ -1,4 +1,4 @@
-package kr.kw.matcher.module.chat.chat.dto;
+package kr.kw.matcher.module.chat.chat.application.dto;
 
 import lombok.Data;
 
