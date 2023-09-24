@@ -16,7 +16,7 @@ spring:
     show-sql: true
   redis:
     host: 127.0.0.1
-    port: 6379
+    port: 6378
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
