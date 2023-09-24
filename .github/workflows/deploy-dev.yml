@@ -17,10 +17,15 @@ jobs:
         run: chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -f Dockerfile -t ${{ secrets.DOCKER_IMAGE_NAME }} .
-          docker push ${{ secrets.API_HOST }}:5000/api:latest
+          docker push ${{ secrets.DOCKER_IMAGE_NAME }}
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
