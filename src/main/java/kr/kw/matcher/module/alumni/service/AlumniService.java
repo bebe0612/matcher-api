@@ -27,7 +27,6 @@ public class AlumniService {
                 user.getYearOfAdmission()
         )
                 .stream()
-                .limit(6)
                 .map(UserDto::from)
                 .collect(Collectors.toList());
     }
