@@ -1,14 +1,14 @@
 package kr.kw.matcher.module.user.domain;
 
+import kr.kw.matcher.module.friend.domain.Friend;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Setter
@@ -35,6 +35,11 @@ public class User {
 
     @Column(nullable = false)
     private Long yearOfAdmission;
+
+    @ToString.Exclude
+    @OrderBy("createdDt DESC")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private final Set<Friend> Friends = new LinkedHashSet<>(); // 친구
 
     @Column()
     private String description;
