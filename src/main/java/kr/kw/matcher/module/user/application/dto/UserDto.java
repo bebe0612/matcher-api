@@ -31,6 +31,7 @@ public class UserDto {
                 .nickname(entity.getNickname())
                 .schoolName(entity.getSchoolName())
                 .yearOfAdmission(entity.getYearOfAdmission())
+                .createdDt(entity.getCreatedDt())
                 .build();
     }
 
