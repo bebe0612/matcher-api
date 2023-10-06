@@ -12,6 +12,8 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -34,5 +36,9 @@ public class ChatService {
         chat = chatRepository.save(chat);
 
         redisPublisher.publish(topic, chat);
+    }
+
+    public List<Chat> getChats(Long roomId) {
+        return chatRepository.findByRoomId(roomId);
     }
 }

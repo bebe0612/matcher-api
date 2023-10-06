@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,5 +21,10 @@ public class ChatController {
     @MessageMapping("/chat/message")
     public void message(ChatCreateBody body) {
         chatService.sendMessage(body);
+    }
+
+    @GetMapping("/v1/chats")
+    public List<Chat> getChats(@RequestParam Long roomId) {
+        return chatService.getChats(roomId);
     }
 }
