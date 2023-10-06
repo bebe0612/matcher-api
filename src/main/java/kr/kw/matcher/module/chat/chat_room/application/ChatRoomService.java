@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,6 +31,12 @@ public class ChatRoomService {
         Long friendId = Math.max(userId, user2Id);
 
         ChatRoom willSavedChatRoom = ChatRoom.of(hostId, friendId, "");
+
+        Optional<ChatRoom> remain = chatRoomRepository.findByHostIdAndFriendId(hostId, friendId);
+
+        if(remain.isPresent()) {
+            return remain.get();
+        }
 
         ChatRoom chatRoom = chatRoomRepository.save(willSavedChatRoom);
         redisChatRoomRepository.save(chatRoom);
