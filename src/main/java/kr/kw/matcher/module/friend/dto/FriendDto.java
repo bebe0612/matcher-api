@@ -12,7 +12,8 @@ public class FriendDto {
     Long id;
     String email;
     String nickname;
-
+    Long roomId;
+    
     public static FriendDto from(Friend entity) {
         return FriendDto.builder()
                 .id(entity.getId())
