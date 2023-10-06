@@ -24,11 +24,11 @@ public class ChatRoom implements Serializable {
     @Column(nullable = false)
     private Long hostId;
 
-    @Column()
-    private String name;
+    @Column(nullable = false)
+    private Long friendId;
 
     @Column()
-    private Long memberCount;
+    private String name;
 
     @Column(nullable = false)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -37,11 +37,11 @@ public class ChatRoom implements Serializable {
     @Column(nullable = false)
     private Boolean deleted;
 
-    public static ChatRoom of(Long hostId, String name) {
+    public static ChatRoom of(Long hostId, Long friendId, String name) {
         return ChatRoom.builder()
                 .hostId(hostId)
+                .friendId(friendId)
                 .name(name)
-                .memberCount(0L)
                 .createdDt(LocalDateTime.now())
                 .deleted(false)
                 .build();

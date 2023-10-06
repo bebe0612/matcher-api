@@ -16,28 +16,24 @@ import javax.transaction.Transactional;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final RedisChatRoomRepository redisChatRoomRepository;
-    private final ChatRoomMemberService chatRoomMemberService;
 
+    public Long getChatRoomId(Long user1Id, Long user2Id) {
+        Long hostId = Math.min(user1Id, user2Id);
+        Long friendId = Math.max(user1Id, user2Id);
+        ChatRoom chatRoom = chatRoomRepository.findByHostIdAndFriendId(hostId, friendId).orElseThrow();
+
+        return chatRoom.getId();
+    }
     @Transactional
-    public ChatRoom createOne(Long userId) {
-        ChatRoom willSavedChatRoom = ChatRoom.of(userId, "");
-        willSavedChatRoom.setMemberCount(1L);
+    public ChatRoom createOne(Long userId, Long user2Id) {
+        Long hostId = Math.min(userId, user2Id);
+        Long friendId = Math.max(userId, user2Id);
+
+        ChatRoom willSavedChatRoom = ChatRoom.of(hostId, friendId, "");
 
         ChatRoom chatRoom = chatRoomRepository.save(willSavedChatRoom);
         redisChatRoomRepository.save(chatRoom);
 
-        // host user join
-        chatRoomMemberService.createOne(chatRoom.getId(), userId);
-
         return chatRoom;
-    }
-
-    @Transactional
-    public void joinRoom(Long roomId, Long userId) {
-        //ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow();
-        ChatRoom chatRoom = redisChatRoomRepository.findRoomById(roomId.toString());
-        chatRoom.setMemberCount(chatRoom.getMemberCount() + 1L);
-
-        chatRoomMemberService.createOne(roomId, userId);
     }
 }
